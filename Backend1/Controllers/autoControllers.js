@@ -27,15 +27,30 @@ const loginUser = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
+const create = async(req,res) => {
+
+}
+
+// const getProfile = async (req, res) => {
+//     try {
+//         const user = await Users.findById(req.user.user);
+//         res.status(200).json(user);
+//     } catch (error) {
+//         res.status(401).json({ message: "User not found" });
+//     }
+// };
 
 const getProfile = async (req, res) => {
     try {
-        const user = await Users.findById(req.user.user);
+        const user = await Users.findById(req.user.user)
+            .populate("bookings");
+
         res.status(200).json(user);
     } catch (error) {
         res.status(401).json({ message: "User not found" });
     }
 };
+
 const search = async (req, res) => {
     try {
         const {

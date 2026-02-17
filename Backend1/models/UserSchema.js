@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const userSchema = new mongoose.Schema({
     name:{
         type: String,
@@ -11,17 +12,24 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
-        
+        required:true
     },
     role:{
         type:String,
         enum: ["Admin",'User',"Agent"],
         required:true,
         default:"User"
-
-
     }
-},{timestamps:true})
+},{timestamps:true});
 
-module.exports =mongoose.model("User",userSchema);
+
+userSchema.virtual("bookings", {
+    ref: "BookingInquiry",
+    localField: "_id",
+    foreignField: "user"
+});
+
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+
+module.exports = mongoose.model("User",userSchema);
