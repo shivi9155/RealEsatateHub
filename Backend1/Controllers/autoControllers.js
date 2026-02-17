@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../models/UserSchema");
 const RealEstate = require("../models/RealEstateSchema");
+const BookingInquiry = require("../models/BookingInquirySchema");
 
 const loginUser = async (req, res) => {
     try {
@@ -46,18 +47,13 @@ const search = async (req, res) => {
         } = req.query;
 
         let filter = {};
-
-        // Property Type
         if (propertyType) {
             filter.propertyType = propertyType;
         }
 
-        // City (Nested location field)
         if (city) {
             filter["location.city"] = { $regex: city, $options: "i" };
         }
-
-        // State (Nested location field)
         if (state) {
             filter["location.state"] = { $regex: state, $options: "i" };
         }
@@ -92,8 +88,48 @@ const search = async (req, res) => {
 
 
 
+
+const bookProperty = async (req, res) => {
+    try {
+        const {
+            property,
+            user,
+            fullName,
+            email,
+            phone,
+            message,
+            visitDate
+        } = req.body;
+
+        const booking = await BookingInquiry.create({
+            property,
+            user,
+            fullName,
+            email,
+            phone,
+            message,
+            visitDate
+        });
+
+        res.status(201).json({
+            success: true,
+            data: booking
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     loginUser,
     getProfile,
-    search
-}
+    search,
+    bookProperty
+};
+
+
+

@@ -37,13 +37,18 @@ const BookingInquirySchema = new mongoose.Schema(
     },
 
     visitDate: {
-      type: Date
+      type: Date,
+      required: true
     },
 
     status: {
       type: String,
       enum: ["Pending", "Approved", "Rejected", "Completed"],
       default: "Pending"
+    },
+
+    notes: {
+      type: String  
     }
   },
   {

@@ -7,19 +7,15 @@ const RealEstate = require("./models/RealEstateSchema");
 const ReviewRating = require("./models/ReviewRatingSchema");
 const Setting = require("./models/SystemSettingSchema");
 
+const { loginUser, getProfile, search } = require("./Controllers/autoControllers");
+
 const app = express();
 app.use(express.json());
-const { loginUser, getProfile, search } = require("./Controllers/autoControllers.js");
-
-
 mongoose.connect("mongodb://127.0.0.1:27017/MernStack")
-.then(() => {
-    console.log("DB Connected");
-})
-.catch((err) => {
-    console.log("DB Connection Error:", err.message);
-});
+.then(() => console.log("DB Connected"))
+.catch((err) => console.log("DB Connection Error:", err.message));
 
+// Create Admin / User
 app.post("/api/admin", async (req, res) => {
     try {
         const admin = await User.create(req.body);
@@ -29,6 +25,7 @@ app.post("/api/admin", async (req, res) => {
     }
 });
 
+// Update Admin
 app.put("/api/admin/:id", async (req, res) => {
     try {
         const updatedAdmin = await User.findByIdAndUpdate(
@@ -43,6 +40,7 @@ app.put("/api/admin/:id", async (req, res) => {
     }
 });
 
+// Delete Admin
 app.delete("/api/admin/:id", async (req, res) => {
     try {
         const deletedAdmin = await User.findByIdAndDelete(req.params.id);
@@ -51,7 +49,7 @@ app.delete("/api/admin/:id", async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 });
-
+// Create Property
 app.post("/api/realEstate", async (req, res) => {
     try {
         const realEstate = await RealEstate.create(req.body);
@@ -61,6 +59,7 @@ app.post("/api/realEstate", async (req, res) => {
     }
 });
 
+// Get All Properties
 app.get("/api/realEstate", async (req, res) => {
     try {
         const properties = await RealEstate.find().populate("owner");
@@ -70,17 +69,16 @@ app.get("/api/realEstate", async (req, res) => {
     }
 });
 
+// Get Single Property
 app.get("/api/realEstate/:id", async (req, res) => {
     try {
-        const realEstate = await RealEstate.findById(req.params.id)
-            .populate("owner");
+        const property = await RealEstate.findById(req.params.id).populate("owner");
 
-        if (!realEstate) {
+        if (!property) {
             return res.status(404).json({ success: false, message: "Property not found" });
         }
 
-        res.status(200).json({ success: true, data: realEstate });
-
+        res.status(200).json({ success: true, data: property });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
@@ -104,7 +102,6 @@ app.post("/api/reviewRating", async (req, res) => {
     }
 });
 
-
 app.post("/api/settings", async (req, res) => {
     try {
         const settings = await Setting.create(req.body);
@@ -113,25 +110,13 @@ app.post("/api/settings", async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 });
-app.post("/api/booking",async (req,res) => {
-    try{
-        const booking = await Booking.create(req.body);
-        res.status(201).json({success:true,data: booking});
-
-    }catch(error){
-        res.status(400).json({success: false, message: error.message});
-    }
-})
 app.post("/api/login", loginUser);
 app.get("/api/profile", getProfile);
 app.get("/api/search", search);
 
-
 app.get("/", (req, res) => {
     res.send("Real Estate System API Running...");
 });
-
-
 const PORT = 3000;
 
 app.listen(PORT, () => {

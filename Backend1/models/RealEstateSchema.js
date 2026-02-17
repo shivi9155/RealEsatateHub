@@ -47,7 +47,7 @@ const realEstateSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Indexing for faster search
+
 realEstateSchema.index({ price: 1 });
 realEstateSchema.index({ "location.city": 1 });
 
