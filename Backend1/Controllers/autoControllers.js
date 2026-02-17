@@ -3,6 +3,7 @@ const Users = require("../models/UserSchema");
 const RealEstate = require("../models/RealEstateSchema");
 const BookingInquiry = require("../models/BookingInquirySchema");
 
+
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -57,13 +58,9 @@ const search = async (req, res) => {
         if (state) {
             filter["location.state"] = { $regex: state, $options: "i" };
         }
-
-        // Status
         if (status) {
             filter.status = status;
         }
-
-        // Price Range
         if (minPrice || maxPrice) {
             filter.price = {};
             if (minPrice) filter.price.$gte = Number(minPrice);
@@ -124,12 +121,88 @@ const bookProperty = async (req, res) => {
     }
 };
 
+
+
+const approveBooking = async (req, res) => {
+    try {
+        const bookingInquiry = await BookingInquiry.findById(req.params.id);
+
+        if (!bookingInquiry) {
+            return res.status(404).json({
+                success: false,
+                message: "Booking Inquiry not found"
+            });
+        }
+
+        if (bookingInquiry.status !== "Pending") {
+            return res.status(400).json({
+                success: false,
+                message: `Booking already ${bookingInquiry.status}`
+            });
+        }
+
+    
+        bookingInquiry.status = "Approved";
+        await bookingInquiry.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Booking Approved Successfully",
+            data: bookingInquiry
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
+const rejectBooking = async (req, res) => {
+    try {
+        const bookingInquiry = await BookingInquiry.findById(req.params.id);
+
+        if (!bookingInquiry) {
+            return res.status(404).json({
+                success: false,
+                message: "Booking Inquiry not found"
+            });
+        }
+        if (bookingInquiry.status !== "Pending") {
+            return res.status(400).json({
+                success: false,
+                message: `Booking rejected ${bookingInquiry.status}`
+            });
+        }
+        bookingInquiry.status = "rejected";
+        await bookingInquiry.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Booking Rejected",
+            data: bookingInquiry
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     loginUser,
     getProfile,
     search,
-    bookProperty
+    bookProperty,
+    approveBooking,
+    rejectBooking
 };
+
+
 
 
 
