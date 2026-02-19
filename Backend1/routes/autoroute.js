@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {registrationValidator} = require('../Validator/bodyvalidator.js');
 
 const { 
     loginUser, 
@@ -12,7 +13,7 @@ const {
 
 const verifyToken = require("../middleware/verifyToken");
 
-router.post("/login", loginUser);
+router.post("/login", registrationValidator,loginUser);
 router.get("/profile", verifyToken, getProfile);
 
 

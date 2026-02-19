@@ -6,6 +6,7 @@ const Booking = require("./models/BookingInquirySchema");
 const RealEstate = require("./models/RealEstateSchema");
 const ReviewRating = require("./models/ReviewRatingSchema");
 const Setting = require("./models/SystemSettingSchema");
+const { registrationValidator, validate } = require("./Validator/bodyvalidator");
 
 const { 
     loginUser, 
@@ -128,7 +129,7 @@ app.post("/api/settings", async (req, res) => {
 });
 
 
-app.post("/api/login", loginUser);
+app.post("/api/login", registrationValidator,validate,loginUser);
 app.get("/api/profile", verifyToken, getProfile);
 app.get("/api/search", search);
 
