@@ -1,147 +1,61 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
-const User = require("./models/UserSchema");
-const Booking = require("./models/BookingInquirySchema");
-const RealEstate = require("./models/RealEstateSchema");
-const ReviewRating = require("./models/ReviewRatingSchema");
-const Setting = require("./models/SystemSettingSchema");
-const { registrationValidator, validate } = require("./Validator/bodyvalidator");
+// Route imports
+const authRoute = require("./routes/authRoute");
+const realEstateRoute = require("./routes/realEstateRoute");
+const bookingRoute = require("./routes/bookingRoute");
+const reviewRoute = require("./routes/reviewRoute");
+const userRoute = require("./routes/userRoute");
+const settingRoute = require("./routes/settingRoute");
 
-const { 
-    loginUser, 
-    getProfile, 
-    search, 
-    approveBooking, 
-    rejectBooking 
-} = require("./controllers/autoControllers");
-
-const verifyToken = require("./middleware/verifyToken");
+// Controllers for search
+const { search } = require("./controllers/autoControllers");
 
 const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
-mongoose.connect("mongodb://127.0.0.1:27017/MernStack")
-.then(() => console.log(" DB Connected"))
-.catch((err) => console.log(" DB Connection Error:", err.message));
 
+// Database connection
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log("✅ DB Connected"))
+.catch((err) => console.log("❌ DB Connection Error:", err.message));
 
-app.post("/api/admin", async (req, res) => {
-    try {
-        const admin = await User.create(req.body);
-        res.status(201).json({ success: true, data: admin });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
+// Route middlewares
+app.use("/api/auth", authRoute);
+app.use("/api/properties", realEstateRoute);
+app.use("/api/bookings", bookingRoute);
+app.use("/api/reviews", reviewRoute);
+app.use("/api/users", userRoute);
+app.use("/api/settings", settingRoute);
 
-app.put("/api/admin/:id", async (req, res) => {
-    try {
-        const updatedAdmin = await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        res.status(200).json({ success: true, data: updatedAdmin });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.delete("/api/admin/:id", async (req, res) => {
-    try {
-        const deletedAdmin = await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({ success: true, data: deletedAdmin });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-app.post("/api/realEstate", async (req, res) => {
-    try {
-        const realEstate = await RealEstate.create(req.body);
-        res.status(201).json({ success: true, data: realEstate });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.get("/api/realEstate", async (req, res) => {
-    try {
-        const properties = await RealEstate.find().populate("owner");
-        res.status(200).json({ success: true, data: properties });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.get("/api/realEstate/:id", async (req, res) => {
-    try {
-        const property = await RealEstate.findById(req.params.id).populate("owner");
-
-        if (!property) {
-            return res.status(404).json({ success: false, message: "Property not found" });
-        }
-
-        res.status(200).json({ success: true, data: property });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.post("/api/booking", async (req, res) => {
-    try {
-        const booking = await Booking.create(req.body);
-        res.status(201).json({ success: true, data: booking });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.patch("/api/booking/approve/:id", verifyToken, approveBooking);
-
-
-app.patch("/api/booking/reject/:id", verifyToken, rejectBooking);
-
-
-app.post("/api/reviewRating", async (req, res) => {
-    try {
-        const reviewRating = await ReviewRating.create(req.body);
-        res.status(201).json({ success: true, data: reviewRating });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-
-app.post("/api/settings", async (req, res) => {
-    try {
-        const settings = await Setting.create(req.body);
-        res.status(201).json({ success: true, data: settings });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-});
-
-
-app.post("/api/login", registrationValidator,validate,loginUser);
-app.get("/api/profile", verifyToken, getProfile);
+// Search endpoint
 app.get("/api/search", search);
 
-
-
+// Health check endpoint
 app.get("/", (req, res) => {
     res.send("🏠 Real Estate System API Running...");
 });
 
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
+});
 
-
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`🚀 Server Running on Port ${PORT}`);

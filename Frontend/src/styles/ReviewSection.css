@@ -1,0 +1,55 @@
+/* Review Section */
+.review-form-container {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #2563eb;
+    margin-bottom: 20px;
+}
+
+.review-form-container h4 {
+    color: #1f2937;
+    margin-bottom: 20px;
+}
+
+.review-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-form-container .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-form-container label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.review-form-container select,
+.review-form-container textarea {
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.review-form-container textarea {
+    resize: vertical;
+}
+
+.review-form-container .submit-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.review-form-container .submit-btn:hover {
+    background-color: #1e40af;
+}

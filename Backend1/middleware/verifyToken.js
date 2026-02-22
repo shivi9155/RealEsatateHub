@@ -1,20 +1,40 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        return res.status(401).json({ message: "Unauthorized - No token" });
-    }
-
-    const token = authHeader.split(" ")[1];
-
     try {
-        const payload = jwt.verify(token, "Shivani");
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).json({ 
+                success: false,
+                message: "Unauthorized - No token provided" 
+            });
+        }
+
+        // Check for Bearer token format
+        if (!authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ 
+                success: false,
+                message: "Invalid token format. Use 'Bearer <token>'" 
+            });
+        }
+
+        const token = authHeader.substring(7); // Remove "Bearer " prefix
+
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.user = payload;
         next();
     } catch (error) {
-        return res.status(401).json({ message: "Invalid or Expired Token" });
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ 
+                success: false,
+                message: "Token expired" 
+            });
+        }
+        return res.status(401).json({ 
+            success: false,
+            message: "Invalid token" 
+        });
     }
 };
 
