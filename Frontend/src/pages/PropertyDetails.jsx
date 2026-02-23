@@ -54,9 +54,23 @@ const PropertyDetails = () => {
     if (error) return <div className="error-message" style={{ textAlign: 'center', padding: '100px', color: 'red' }}>{error}</div>;
     if (!property) return <div className="error-message" style={{ textAlign: 'center', padding: '100px' }}>Property not found</div>;
 
+    const getDefaultImage = (type) => {
+        switch (type) {
+            case "Apartment":
+                return "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+            case "Villa":
+                return "https://images.unsplash.com/photo-1580587771525-78b9bed3b978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+            case "Plot":
+                return "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+            case "House":
+            default:
+                return "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+        }
+    };
+
     const imageUrl = property.images?.length > 0
         ? property.images[0]
-        : "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+        : getDefaultImage(property.propertyType);
 
     return (
         <div className="property-details-container">

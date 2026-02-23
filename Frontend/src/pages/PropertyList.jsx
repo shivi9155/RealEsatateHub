@@ -36,12 +36,25 @@ const PropertyList = () => {
                 limit: 9,
                 ...filters
             };
-            const response = await propertyService.searchProperties(params);
+            // If no filter values provided, use the public properties endpoint
+            const hasFilters = Object.keys(filters).some(key => {
+                const val = filters[key];
+                return val !== undefined && val !== null && String(val).trim() !== "";
+            });
+
+            const response = hasFilters
+                ? await propertyService.searchProperties(params)
+                : await propertyService.getAllProperties({ page, limit: 9 });
             setProperties(response.data.data);
             setTotalPages(response.data.pages);
             setTotalResults(response.data.totalCount);
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to fetch properties");
+            // Show detailed error if available
+            let msg = err.response?.data?.message || "Failed to fetch properties";
+            if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+                msg = err.response.data.errors.map(e => `${e.field}: ${e.message}`).join(", ");
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }

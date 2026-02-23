@@ -14,6 +14,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import MyBookings from "./pages/MyBookings";
 import ManageListings from "./pages/ManageListings";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -44,6 +46,9 @@ function App() {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/properties/:id" element={<PropertyDetails />} />
+
+                            <Route path="/about" element={<About />} />
+                            <Route path="/contact" element={<Contact />} />
 
                             <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
                             <Route path="/my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />

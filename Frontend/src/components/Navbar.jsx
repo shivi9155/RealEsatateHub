@@ -12,6 +12,8 @@ const Navbar = () => {
                 <Link to="/" className="logo">RealEstateHub</Link>
                 <div className="nav-menu">
                     <Link to="/properties" className="nav-link">Properties</Link>
+                    <Link to="/about" className="nav-link">About</Link>
+                    <Link to="/contact" className="nav-link">Contact</Link>
                     {isAuthenticated && (
                         <>
                             <Link to="/property/create" className="nav-link">Add Property</Link>

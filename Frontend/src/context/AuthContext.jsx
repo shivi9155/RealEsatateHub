@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback } from "react";
+import React, { createContext, useState, useCallback, useEffect } from "react";
 import { authService } from "../services/api";
 
 export const AuthContext = createContext();
@@ -12,6 +12,27 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // On mount, if token exists try to restore user profile from server
+    useEffect(() => {
+        const restore = async () => {
+            const storedToken = localStorage.getItem("token");
+            if (!storedToken) return;
+            try {
+                const resp = await authService.getProfile();
+                if (resp?.data?.data) {
+                    setUser(resp.data.data);
+                }
+            } catch (err) {
+                // Token invalid or expired - clear and fall back to logged out state
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setToken(null);
+                setUser(null);
+            }
+        };
+        restore();
+    }, []);
 
     const register = useCallback(async (name, email, password) => {
         setLoading(true);
@@ -33,7 +54,7 @@ export const AuthProvider = ({ children }) => {
                 message = err.response.data.errors.map(e => `${e.field}: ${e.message}`).join(", ");
             }
             setError(message);
-            throw err;
+            throw new Error(message);
         } finally {
             setLoading(false);
         }

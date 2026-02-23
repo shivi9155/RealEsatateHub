@@ -147,6 +147,52 @@ const seedData = async () => {
                 status: "Available",
                 images: ["https://images.unsplash.com/photo-1599824619159-403a74ef5824?auto=format&fit=crop&w=1200&q=80"]
             }
+            ,
+            {
+                title: "Maple Residency",
+                description: "A family-friendly 2-bedroom apartment near parks and schools, with secure parking.",
+                price: 8000000,
+                propertyType: "Apartment",
+                location: {
+                    address: "12 Green Park",
+                    city: "Chennai",
+                    state: "Tamil Nadu",
+                    pincode: "600001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1505691723518-36a3b3e0a4f7?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Lakeside Bungalow",
+                description: "Sprawling bungalow with private lake access and landscaped gardens.",
+                price: 35000000,
+                propertyType: "House",
+                location: {
+                    address: "7 Lake View Road",
+                    city: "Udaipur",
+                    state: "Rajasthan",
+                    pincode: "313001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1505691723518-36a3b3e0a4f7?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Coastal Breeze Cottage",
+                description: "Small seaside cottage perfect for a weekend getaway or vacation rental.",
+                price: 6500000,
+                propertyType: "House",
+                location: {
+                    address: "Seaside Lane",
+                    city: "Kochi",
+                    state: "Kerala",
+                    pincode: "682001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1505691723518-36a3b3e0a4f7?auto=format&fit=crop&w=1200&q=80"]
+            }
         ];
 
         await RealEstate.insertMany(properties);

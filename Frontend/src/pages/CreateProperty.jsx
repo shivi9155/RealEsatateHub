@@ -14,6 +14,7 @@ const CreateProperty = () => {
         description: "",
         price: "",
         propertyType: "Apartment",
+        image: "",
         location: {
             address: "",
             city: "",
@@ -47,11 +48,22 @@ const CreateProperty = () => {
         setError("");
 
         try {
-            await propertyService.createProperty(formData);
+            // Attach owner ID from logged-in user
+            let propertyData = { ...formData, owner: user?.id };
+            // If image is provided, send as array (backend expects images: [])
+            if (propertyData.image) {
+                propertyData.images = [propertyData.image];
+                delete propertyData.image;
+            }
+            await propertyService.createProperty(propertyData);
             alert("Property created successfully!");
             navigate("/");
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to create property");
+            let msg = err.response?.data?.message || "Failed to create property";
+            if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+                msg = err.response.data.errors.map(e => `${e.field}: ${e.message}`).join(", ");
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }
@@ -82,6 +94,16 @@ const CreateProperty = () => {
                             value={formData.description}
                             onChange={handleChange}
                             required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Image URL</label>
+                        <input
+                            type="url"
+                            name="image"
+                            value={formData.image}
+                            onChange={handleChange}
+                            placeholder="https://example.com/image.jpg"
                         />
                     </div>
                     <div className="form-row">
