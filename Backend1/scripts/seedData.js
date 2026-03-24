@@ -192,6 +192,231 @@ const seedData = async () => {
                 owner: admin._id,
                 status: "Available",
                 images: ["https://images.unsplash.com/photo-1505691723518-36a3b3e0a4f7?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Crystal Garden Apartment",
+                description: "Modern 2-BHK apartment with premium amenities and 24/7 security.",
+                price: 9500000,
+                propertyType: "Apartment",
+                location: {
+                    address: "Premium Plaza, Sector 7",
+                    city: "Bangalore",
+                    state: "Karnataka",
+                    pincode: "560001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1445126613408-c09b37e96c20?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Palace Dreams Villa",
+                description: "Elegant 5-bedroom villa with swimming pool and home theater.",
+                price: 52000000,
+                propertyType: "Villa",
+                location: {
+                    address: "Elite Enclave",
+                    city: "Mumbai",
+                    state: "Maharashtra",
+                    pincode: "400028"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Silicon Valley Plot",
+                description: "IT hub facing plot with excellent connectivity to tech parks.",
+                price: 18500000,
+                propertyType: "Plot",
+                location: {
+                    address: "Tech Park Road",
+                    city: "Pune",
+                    state: "Maharashtra",
+                    pincode: "411038"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Metropolitan Studio",
+                description: "High-end studio apartment in the business district, fully furnished.",
+                price: 7200000,
+                propertyType: "Apartment",
+                location: {
+                    address: "Central Business Park",
+                    city: "Hyderabad",
+                    state: "Telangana",
+                    pincode: "500001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1516534775068-bb149f4a5d23?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Tranquil Hills Estate",
+                description: "Secluded hill station house with panoramic valley views.",
+                price: 15000000,
+                propertyType: "House",
+                location: {
+                    address: "Mountainview Estate",
+                    city: "Dehradun",
+                    state: "Uttarakhand",
+                    pincode: "248001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Oceanfront Duplex",
+                description: "Stunning 3-bedroom duplex with direct beach access in Goa.",
+                price: 24000000,
+                propertyType: "House",
+                location: {
+                    address: "Shore Road, Calangute",
+                    city: "Goa",
+                    state: "Goa",
+                    pincode: "403516"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Modern Commercial Complex Plot",
+                description: "Prime commercial plot ready for retail or office development.",
+                price: 45000000,
+                propertyType: "Plot",
+                location: {
+                    address: "Downtown District",
+                    city: "Chennai",
+                    state: "Tamil Nadu",
+                    pincode: "600001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Smart Home Residence",
+                description: "Newly built 4-bedroom house with IoT integration and solar power.",
+                price: 22000000,
+                propertyType: "House",
+                location: {
+                    address: "Tech Township",
+                    city: "Nashik",
+                    state: "Maharashtra",
+                    pincode: "422007"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1555854518-d4f2837b5b9f?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Heritage Fort Palace",
+                description: "Restored historical property with modern amenities and cultural charm.",
+                price: 38000000,
+                propertyType: "House",
+                location: {
+                    address: "Fort Precinct",
+                    city: "Udaipur",
+                    state: "Rajasthan",
+                    pincode: "313001"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Riverside Green Apartments",
+                description: "Eco-friendly 3-bedroom apartments with stunning river views.",
+                price: 11000000,
+                propertyType: "Apartment",
+                location: {
+                    address: "Riverside Complex",
+                    city: "Kochi",
+                    state: "Kerala",
+                    pincode: "682035"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Luxury Vineyard Villa",
+                description: "Sprawling villa on a private estate with wine cellar and gardens.",
+                price: 72000000,
+                propertyType: "Villa",
+                location: {
+                    address: "Wine Country Lane",
+                    city: "Pune",
+                    state: "Maharashtra",
+                    pincode: "412207"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1613138131415-5d68523ba0e4?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Tech Park Office Space Plot",
+                description: "Commercial plot in a bustling IT park area with excellent infrastructure.",
+                price: 28000000,
+                propertyType: "Plot",
+                location: {
+                    address: "Tech Corridor, Phase 2",
+                    city: "Bangalore",
+                    state: "Karnataka",
+                    pincode: "560066"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Designer Urban Loft",
+                description: "Contemporary loft-style apartment in a converted heritage building.",
+                price: 13500000,
+                propertyType: "Apartment",
+                location: {
+                    address: "Artist Quarter",
+                    city: "Mumbai",
+                    state: "Maharashtra",
+                    pincode: "400006"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Paradise Resort Property",
+                description: "Island resort property with water villas and beach access.",
+                price: 95000000,
+                propertyType: "House",
+                location: {
+                    address: "Private Island",
+                    city: "Goa",
+                    state: "Goa",
+                    pincode: "403806"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1464207687429-7505649dae38?auto=format&fit=crop&w=1200&q=80"]
+            },
+            {
+                title: "Startup Hub Plot",
+                description: "Purpose-built land for startups with co-working infrastructure.",
+                price: 35000000,
+                propertyType: "Plot",
+                location: {
+                    address: "Innovation Zone",
+                    city: "Hyderabad",
+                    state: "Telangana",
+                    pincode: "500084"
+                },
+                owner: admin._id,
+                status: "Available",
+                images: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"]
             }
         ];
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import "../styles/Auth.css";
@@ -32,8 +33,17 @@ const Register = () => {
 
     return (
         <div className="auth-container">
-            <div className="auth-card">
-                <h2>Create Account</h2>
+            <motion.div
+                className="auth-card"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                <div className="auth-header">
+                    <span className="page-kicker">Join Us</span>
+                    <h2>Create Account</h2>
+                    <p>Set up your profile to save listings, manage bookings, and unlock a smoother property journey.</p>
+                </div>
                 {error && <div className="error-message">{error}</div>}
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -106,7 +116,7 @@ const Register = () => {
                 <div className="auth-footer">
                     Already have an account? <Link to="/login">Sign in instead</Link>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

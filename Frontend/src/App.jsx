@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 // Pages
 import Home from "./pages/Home";
@@ -36,32 +37,34 @@ const AdminRoute = ({ children }) => {
 function App() {
     return (
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AuthProvider>
-                <div className="app">
-                    <Navbar />
-                    <main className="app-content" style={{ minHeight: 'calc(100vh - 160px)', paddingBottom: '40px' }}>
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/properties" element={<PropertyList />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/properties/:id" element={<PropertyDetails />} />
+            <ThemeProvider>
+                <AuthProvider>
+                    <div className="app">
+                        <Navbar />
+                        <main className="app-content">
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/properties" element={<PropertyList />} />
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/properties/:id" element={<PropertyDetails />} />
 
-                            <Route path="/about" element={<About />} />
-                            <Route path="/contact" element={<Contact />} />
+                                <Route path="/about" element={<About />} />
+                                <Route path="/contact" element={<Contact />} />
 
-                            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-                            <Route path="/my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
-                            <Route path="/manage-listings" element={<ProtectedRoute><ManageListings /></ProtectedRoute>} />
-                            <Route path="/property/create" element={<ProtectedRoute><CreateProperty /></ProtectedRoute>} />
+                                <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                                <Route path="/my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+                                <Route path="/manage-listings" element={<ProtectedRoute><ManageListings /></ProtectedRoute>} />
+                                <Route path="/property/create" element={<ProtectedRoute><CreateProperty /></ProtectedRoute>} />
 
-                            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </main>
-                    <Footer />
-                </div>
-            </AuthProvider>
+                                <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </main>
+                        <Footer />
+                    </div>
+                </AuthProvider>
+            </ThemeProvider>
         </Router>
     );
 }

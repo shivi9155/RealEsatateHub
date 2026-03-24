@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import "../styles/Auth.css";
@@ -25,8 +26,17 @@ const Login = () => {
 
     return (
         <div className="auth-container">
-            <div className="auth-card">
-                <h2>Welcome Back</h2>
+            <motion.div
+                className="auth-card"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                <div className="auth-header">
+                    <span className="page-kicker">Sign In</span>
+                    <h2>Welcome Back</h2>
+                    <p>Continue exploring properties, bookings, and saved opportunities with your account.</p>
+                </div>
                 {error && <div className="error-message">{error}</div>}
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -68,7 +78,7 @@ const Login = () => {
                 <div className="auth-footer">
                     Don't have an account? <Link to="/register">Create one now</Link>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

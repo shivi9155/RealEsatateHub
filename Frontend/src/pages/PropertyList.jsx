@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { propertyService } from "../services/api";
 import PropertyCard from "../components/PropertyCard";
 import "../styles/PropertyList.css";
@@ -14,8 +15,6 @@ const PropertyList = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
-
-    // Filter states initialized from URL params
     const [filters, setFilters] = useState({
         propertyType: queryParams.get("propertyType") || "",
         city: queryParams.get("city") || "",
@@ -30,39 +29,49 @@ const PropertyList = () => {
     const fetchProperties = async () => {
         setLoading(true);
         setError("");
+
         try {
             const params = {
                 page,
                 limit: 9,
                 ...filters
             };
-            // If no filter values provided, use the public properties endpoint
-            const hasFilters = Object.keys(filters).some(key => {
-                const val = filters[key];
-                return val !== undefined && val !== null && String(val).trim() !== "";
-            });
+
+            const hasFilters = Object.values(filters).some((value) => (
+                value !== undefined &&
+                value !== null &&
+                String(value).trim() !== ""
+            ));
 
             const response = hasFilters
                 ? await propertyService.searchProperties(params)
                 : await propertyService.getAllProperties({ page, limit: 9 });
-            setProperties(response.data.data);
-            setTotalPages(response.data.pages);
-            setTotalResults(response.data.totalCount);
+
+            setProperties(response.data.data || []);
+            setTotalPages(response.data.pages || 1);
+            setTotalResults(response.data.totalCount || response.data.data?.length || 0);
         } catch (err) {
-            // Show detailed error if available
-            let msg = err.response?.data?.message || "Failed to fetch properties";
-            if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
-                msg = err.response.data.errors.map(e => `${e.field}: ${e.message}`).join(", ");
+            let message = err.response?.data?.message || "Failed to fetch properties";
+
+            if (Array.isArray(err.response?.data?.errors)) {
+                message = err.response.data.errors
+                    .map((item) => `${item.field}: ${item.message}`)
+                    .join(", ");
             }
-            setError(msg);
+
+            setError(message);
+            setProperties([]);
+            setTotalPages(1);
+            setTotalResults(0);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters(prev => ({
+    const handleFilterChange = (event) => {
+        const { name, value } = event.target;
+
+        setFilters((prev) => ({
             ...prev,
             [name]: value
         }));
@@ -79,106 +88,180 @@ const PropertyList = () => {
         setPage(1);
     };
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5 }
+        }
+    };
+
     return (
         <div className="property-list-container">
-            <aside className="filter-section">
+            <motion.aside
+                className="filter-section"
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+            >
                 <h3>Search Filters</h3>
                 <form className="filter-form">
                     <div className="filter-group">
                         <label>Property Type</label>
-                        <select
+                        <motion.select
                             name="propertyType"
                             value={filters.propertyType}
                             onChange={handleFilterChange}
+                            whileFocus={{ scale: 1.02 }}
                         >
                             <option value="">All Types</option>
                             <option value="House">House</option>
                             <option value="Apartment">Apartment</option>
                             <option value="Villa">Villa</option>
                             <option value="Plot">Plot</option>
-                        </select>
+                        </motion.select>
                     </div>
 
                     <div className="filter-group">
                         <label>City / State</label>
-                        <input
+                        <motion.input
                             type="text"
                             name="city"
-                            placeholder="Try 'Mumbai', 'Delhi'"
+                            placeholder="Try Mumbai or Delhi"
                             value={filters.city}
                             onChange={handleFilterChange}
+                            whileFocus={{ scale: 1.02 }}
                         />
                     </div>
 
                     <div className="filter-group">
                         <label>Min Price</label>
-                        <input
+                        <motion.input
                             type="number"
                             name="minPrice"
                             placeholder="No Min"
                             value={filters.minPrice}
                             onChange={handleFilterChange}
+                            whileFocus={{ scale: 1.02 }}
                         />
                     </div>
 
                     <div className="filter-group">
                         <label>Max Price</label>
-                        <input
+                        <motion.input
                             type="number"
                             name="maxPrice"
                             placeholder="No Max"
                             value={filters.maxPrice}
                             onChange={handleFilterChange}
+                            whileFocus={{ scale: 1.02 }}
                         />
                     </div>
 
-                    <button type="button" onClick={handleReset} className="reset-btn">
+                    <motion.button
+                        type="button"
+                        onClick={handleReset}
+                        className="reset-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
                         Clear All Filters
-                    </button>
+                    </motion.button>
                 </form>
-            </aside>
+            </motion.aside>
 
             <main className="properties-section">
-                <div className="results-header">
-                    <h2>Properties for Sale & Rent</h2>
-                    <span className="results-count">Showing {properties.length} of {totalResults} available listings</span>
-                </div>
+                <motion.div
+                    className="results-header"
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h2>Properties for Sale and Rent</h2>
+                    <span className="results-count">
+                        Showing {properties.length} of {totalResults} available listings
+                    </span>
+                </motion.div>
 
-                {error && <div className="error-message">{error}</div>}
+                {error && (
+                    <motion.div
+                        className="error-message"
+                        initial={{ y: -10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                    >
+                        {error}
+                    </motion.div>
+                )}
 
                 {loading && page === 1 ? (
                     <div className="loading">Fetching matching properties...</div>
                 ) : (
                     <>
-                        <div className="properties-grid">
-                            {properties.map(property => (
-                                <PropertyCard key={property._id} property={property} />
+                        <motion.div
+                            className="properties-grid"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            {properties.map((property) => (
+                                <motion.div
+                                    key={property._id}
+                                    variants={itemVariants}
+                                    whileHover={{ y: -10 }}
+                                >
+                                    <PropertyCard property={property} />
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
 
                         {properties.length === 0 && !loading && (
-                            <div className="no-results">
+                            <motion.div
+                                className="no-results"
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                            >
                                 <h4>No properties found</h4>
                                 <p>Try adjusting your filters or location to find more results.</p>
-                            </div>
+                            </motion.div>
                         )}
 
                         {totalPages > 1 && (
-                            <div className="pagination">
-                                <button
-                                    onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                            <motion.div
+                                className="pagination"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                            >
+                                <motion.button
+                                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                                     disabled={page === 1}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     Previous
-                                </button>
+                                </motion.button>
                                 <span>Page {page} of {totalPages}</span>
-                                <button
-                                    onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                                <motion.button
+                                    onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
                                     disabled={page === totalPages}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     Next
-                                </button>
-                            </div>
+                                </motion.button>
+                            </motion.div>
                         )}
                     </>
                 )}
